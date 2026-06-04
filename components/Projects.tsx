@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { FaPlay } from "react-icons/fa";
 import { FiX, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { suite, apps as contentApps } from "@/lib/content";
 
 type Media = {
   type: "image" | "video";
@@ -18,46 +19,7 @@ type App = {
   media?: Media[];
 };
 
-const suite = {
-  title: "Restaurant Management Suite",
-  description:
-    "Designed and built a complete restaurant management system from the ground up. Five interconnected apps sharing a Firebase backend, all launched and actively used in production by real staff daily.",
-  tags: ["Next.js", "React Native", "Firebase", "Tailwind CSS", "Serverless"],
-  note: "Solo project — I designed the system architecture and made all key technical decisions.",
-};
-
-const apps: App[] = [
-  {
-    title: "Point of Sale (POS)",
-    description:
-      "Admin-side web app for processing orders, managing tables, and handling transactions. Built to handle real restaurant rush conditions.",
-    tags: ["Next.js", "Firebase", "Tailwind CSS"],
-  },
-  {
-    title: "Kitchen Display System",
-    description:
-      "Real-time order display for kitchen staff. Orders appear instantly as they're placed and update live across devices.",
-    tags: ["Next.js", "Firebase Realtime DB", "Tailwind CSS"],
-  },
-  {
-    title: "Gift Card System",
-    description:
-      "Full gift card lifecycle management — issuance, balance tracking, and redemption — with data integrity to prevent double-spending.",
-    tags: ["Next.js", "Firebase", "Tailwind CSS"],
-  },
-  {
-    title: "Staff Clock-In",
-    description:
-      "Staff attendance and shift tracking app. Simple for staff to use, gives management a clear view of hours worked.",
-    tags: ["React Native", "Firebase"],
-  },
-  {
-    title: "Customer Website",
-    description:
-      "Public-facing restaurant website for customers — menu, info, and online presence.",
-    tags: ["Next.js", "Tailwind CSS", "Firebase"],
-  },
-];
+const apps = contentApps as App[];
 
 const SIZES =
   "(max-width: 768px) calc(100vw - 3rem), (max-width: 1024px) calc(50vw - 2rem), 33vw";
@@ -358,7 +320,7 @@ export default function Projects() {
                 {suite.title}
               </h3>
               <span className="shrink-0 text-xs px-3 py-1 rounded-full border border-[#3b9eff]/30 text-[#3b9eff] font-medium">
-                Production
+                {suite.badge}
               </span>
             </div>
             <p className="text-neutral-400 leading-relaxed mb-5">

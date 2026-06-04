@@ -1,13 +1,14 @@
 import { GithubIcon, LinkedinIcon } from "@/components/icons";
+import { person } from "@/lib/content";
 
 export default function Footer() {
   return (
     <footer className="py-10 px-6 border-t border-white/[0.04]">
       <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-        <span className="text-sm text-neutral-500">Vu Anh Huy Bui</span>
+        <span className="text-sm text-neutral-500">{person.name}</span>
         <div className="flex items-center gap-6">
           <a
-            href="https://github.com/huybuivuanh"
+            href={person.github}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-sm text-neutral-500 hover:text-white transition-colors"
@@ -16,7 +17,7 @@ export default function Footer() {
             GitHub
           </a>
           <a
-            href="https://www.linkedin.com/in/vu-anh-huy-bui-1467a8277/"
+            href={person.linkedin}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-sm text-neutral-500 hover:text-white transition-colors"

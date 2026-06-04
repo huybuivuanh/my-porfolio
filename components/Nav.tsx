@@ -1,12 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { GithubIcon, LinkedinIcon } from "@/components/icons";
-
-const NAV_LINKS = [
-  { href: "#projects", label: "Projects" },
-  { href: "#skills", label: "Skills" },
-  { href: "#about", label: "About" },
-];
+import { person, navLinks } from "@/lib/content";
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -28,12 +23,12 @@ export default function Nav() {
     >
       <nav className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
         <span className="font-semibold text-white tracking-tight text-sm">
-          Vu Anh Huy Bui
+          {person.name}
         </span>
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-6">
-          {NAV_LINKS.map(({ href, label }) => (
+          {navLinks.map(({ href, label }) => (
             <a
               key={href}
               href={href}
@@ -43,7 +38,7 @@ export default function Nav() {
             </a>
           ))}
           <a
-            href="https://github.com/huybuivuanh"
+            href={person.github}
             target="_blank"
             rel="noopener noreferrer"
             className="text-neutral-400 hover:text-white transition-colors"
@@ -52,7 +47,7 @@ export default function Nav() {
             <GithubIcon size={18} />
           </a>
           <a
-            href="https://www.linkedin.com/in/vu-anh-huy-bui-1467a8277/"
+            href={person.linkedin}
             target="_blank"
             rel="noopener noreferrer"
             className="text-neutral-400 hover:text-white transition-colors"
@@ -65,7 +60,7 @@ export default function Nav() {
         {/* Mobile right side */}
         <div className="flex md:hidden items-center gap-4">
           <a
-            href="https://github.com/huybuivuanh"
+            href={person.github}
             target="_blank"
             rel="noopener noreferrer"
             className="text-neutral-400 hover:text-white transition-colors"
@@ -74,7 +69,7 @@ export default function Nav() {
             <GithubIcon size={18} />
           </a>
           <a
-            href="https://www.linkedin.com/in/vu-anh-huy-bui-1467a8277/"
+            href={person.linkedin}
             target="_blank"
             rel="noopener noreferrer"
             className="text-neutral-400 hover:text-white transition-colors"
@@ -107,7 +102,7 @@ export default function Nav() {
       {menuOpen && (
         <div className="md:hidden border-t border-white/[0.06] bg-[#0a0a0a]/95 backdrop-blur-md">
           <div className="max-w-5xl mx-auto px-6 py-4 flex flex-col gap-4">
-            {NAV_LINKS.map(({ href, label }) => (
+            {navLinks.map(({ href, label }) => (
               <a
                 key={href}
                 href={href}

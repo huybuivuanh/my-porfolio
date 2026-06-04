@@ -1,30 +1,4 @@
-const groups = [
-  {
-    label: "Languages & Frameworks",
-    skills: [
-      "JavaScript",
-      "TypeScript",
-      "Next.js",
-      "React",
-      "React Native",
-      "Tailwind CSS",
-    ],
-  },
-  {
-    label: "Backend & Infrastructure",
-    skills: [
-      "Firebase Auth",
-      "Firestore",
-      "Firebase Realtime DB",
-      "Next.js API Routes",
-      "Serverless Architecture",
-    ],
-  },
-  {
-    label: "Tools & Workflow",
-    skills: ["Git", "GitHub", "Vercel", "VS Code"],
-  },
-];
+import { skillGroups } from "@/lib/content";
 
 export default function Skills() {
   return (
@@ -32,7 +6,7 @@ export default function Skills() {
       <div className="max-w-5xl mx-auto">
         <h2 className="text-3xl font-bold text-white mb-12">Skills</h2>
         <div className="flex flex-col gap-10">
-          {groups.map((group) => (
+          {skillGroups.map((group) => (
             <div key={group.label}>
               <h3 className="text-xs font-semibold text-neutral-500 uppercase tracking-[0.15em] mb-4">
                 {group.label}

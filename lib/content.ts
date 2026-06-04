@@ -33,33 +33,38 @@ export const suite = {
 
 export const apps = [
   {
+    slug: "pos",
     title: "Point of Sale (POS)",
     description:
       "Cross-platform Expo app for staff to handle dine-in table orders, take-out, item customization, and payments. Paired with a Next.js admin panel for menu management, order history, and staff accounts.",
     tags: ["Expo", "React Native", "Firebase", "NativeWind", "Zustand"],
   },
   {
+    slug: "kds",
     title: "Kitchen Display System (KDS)",
     description:
       "Real-time tablet app for kitchen staff. Orders appear instantly as they're placed and update live across devices. Shares the same Firebase backend as the POS.",
     tags: ["Expo", "React Native", "Firebase", "NativeWind"],
   },
   {
+    slug: "gift-card",
     title: "Gift Card System",
     description:
       "Full gift card lifecycle — issuance, balance tracking, and redemption — with data integrity to prevent double-spending. Includes a separate admin panel for managing cards.",
     tags: ["Next.js", "Firebase", "Tailwind CSS"],
   },
   {
+    slug: "staff-clock-in",
     title: "Staff Clock-In",
     description:
       "Staff attendance and shift tracking app with a dedicated admin panel. Around 80% complete — development paused to focus on improving the four production apps.",
     tags: ["Expo", "React Native", "Firebase"],
   },
   {
+    slug: "customer-website",
     title: "Customer Website",
     description:
-      "Public-facing restaurant website for customers — menu, info, and online presence. Backed by its own Firebase project with a separate admin panel for content updates.",
+      "https://www.asianle.ca/ .Public-facing restaurant website for customers — menu, info, and online presence. Backed by its own Firebase project with a separate admin panel for content updates.",
     tags: ["Next.js", "Firebase", "Tailwind CSS"],
   },
 ];

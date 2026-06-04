@@ -4,22 +4,15 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { FaPlay } from "react-icons/fa";
 import { FiX, FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import { suite, apps as contentApps } from "@/lib/content";
-
-type Media = {
-  type: "image" | "video";
-  src: string;
-  poster?: string;
-};
+import { suite } from "@/lib/content";
+import type { MediaEntry } from "@/lib/media";
 
 type App = {
   title: string;
   description: string;
   tags: string[];
-  media?: Media[];
+  media?: MediaEntry[];
 };
-
-const apps = contentApps as App[];
 
 const SIZES =
   "(max-width: 768px) calc(100vw - 3rem), (max-width: 1024px) calc(50vw - 2rem), 33vw";
@@ -37,7 +30,7 @@ function MediaItem({
   title,
   fill: isFill,
 }: {
-  item: Media;
+  item: MediaEntry;
   title: string;
   fill: boolean;
 }) {
@@ -104,7 +97,7 @@ function MediaModal({
   title,
   onClose,
 }: {
-  items: Media[];
+  items: MediaEntry[];
   initialIndex: number;
   title: string;
   onClose: () => void;
@@ -134,7 +127,7 @@ function MediaModal({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/90 p-4"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/90 p-2"
       onClick={onClose}
     >
       <button
@@ -147,7 +140,7 @@ function MediaModal({
 
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative max-w-5xl w-full flex items-center gap-3"
+        className="relative max-w-7xl w-full flex items-center gap-3"
       >
         <button
           onClick={() => setIdx((i) => i - 1)}
@@ -206,7 +199,7 @@ function CardMedia({
   title,
   onOpen,
 }: {
-  media: Media[];
+  media: MediaEntry[];
   title: string;
   onOpen: (index: number) => void;
 }) {
@@ -228,13 +221,13 @@ function CardMedia({
           className="w-full h-full"
         >
           {current.type === "image" ? (
-            <div className="w-full h-full group-hover:scale-105 transition-transform duration-500">
+            <div className="relative w-full h-full group-hover:scale-105 transition-transform duration-500">
               <MediaItem item={current} title={title} fill />
             </div>
           ) : (
             <div className="w-full h-full">
               {current.poster ? (
-                <div className="w-full h-full group-hover:scale-105 transition-transform duration-500">
+                <div className="relative w-full h-full group-hover:scale-105 transition-transform duration-500">
                   <MediaItem item={current} title={title} fill />
                 </div>
               ) : (
@@ -279,9 +272,9 @@ function CardMedia({
   );
 }
 
-export default function Projects() {
+export default function Projects({ apps }: { apps: App[] }) {
   const [openMedia, setOpenMedia] = useState<{
-    items: Media[];
+    items: MediaEntry[];
     index: number;
     title: string;
   } | null>(null);

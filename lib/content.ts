@@ -36,7 +36,7 @@ export const apps = [
     slug: "pos",
     title: "Point of Sale (POS)",
     description:
-      "Cross-platform Expo app for staff to handle dine-in table orders, take-out, item customization, and payments. Paired with a Next.js admin panel for menu management, order history, and staff accounts. App currently available on the App Store as unlisted app and can be downloaded at https://apps.apple.com/us/app/asianlepos/id6754255041",
+      "Cross-platform Expo app for staff to handle dine-in table orders, take-out, and item customization. Paired with a Next.js admin panel for menu management, order history, and staff accounts. App currently available on the App Store as unlisted app and can be downloaded at https://apps.apple.com/us/app/asianlepos/id6754255041",
     tags: ["Expo", "Next.js", "React Native", "Firebase", "NativeWind"],
   },
   {
@@ -50,7 +50,7 @@ export const apps = [
     slug: "gift-card",
     title: "Gift Card System",
     description:
-      "Full gift card lifecycle — issuance, balance tracking, and redemption — with data integrity to prevent double-spending. Includes a separate admin panel for managing cards.",
+      "Full gift card lifecycle — issuance, balance tracking, and redemption — QR based with data integrity to prevent double-spending. Includes a separate admin panel for managing cards.",
     tags: ["Expo", "Next.js", "React Native", "Firebase", "NativeWind"],
   },
   {
@@ -64,7 +64,7 @@ export const apps = [
     slug: "customer-website",
     title: "Customer Website",
     description:
-      "https://www.asianle.ca/ .Public-facing restaurant website for customers — menu, info, and online presence. Backed by its own Firebase project with a separate admin panel for content updates.",
+      "Public-facing restaurant website for customers — menu, info, and online presence. Backed by its own Firebase project with a separate admin panel for content updates. Website is currently live at https://www.asianle.ca/",
     tags: ["Next.js", "Firebase", "Tailwind CSS"],
   },
 ];

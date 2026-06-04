@@ -37,28 +37,28 @@ export const apps = [
     title: "Point of Sale (POS)",
     description:
       "Cross-platform Expo app for staff to handle dine-in table orders, take-out, item customization, and payments. Paired with a Next.js admin panel for menu management, order history, and staff accounts. App currently available on the App Store as unlisted app and can be downloaded at https://apps.apple.com/us/app/asianlepos/id6754255041",
-    tags: ["Expo", "React Native", "Firebase", "NativeWind", "Zustand"],
+    tags: ["Expo", "Next.js", "React Native", "Firebase", "NativeWind"],
   },
   {
     slug: "kds",
     title: "Kitchen Display System (KDS)",
     description:
       "Real-time tablet app for kitchen staff. Orders appear instantly as they're placed and update live across devices. Shares the same Firebase backend as the POS.",
-    tags: ["Expo", "React Native", "Firebase", "NativeWind"],
+    tags: ["Expo", "Next.js", "React Native", "Firebase", "NativeWind"],
   },
   {
     slug: "gift-card",
     title: "Gift Card System",
     description:
       "Full gift card lifecycle — issuance, balance tracking, and redemption — with data integrity to prevent double-spending. Includes a separate admin panel for managing cards.",
-    tags: ["Next.js", "Firebase", "Tailwind CSS"],
+    tags: ["Expo", "Next.js", "React Native", "Firebase", "NativeWind"],
   },
   {
     slug: "staff-clock-in",
     title: "Staff Clock-In",
     description:
       "Staff attendance and shift tracking app with a dedicated admin panel. Around 80% complete — development paused to focus on improving the four production apps.",
-    tags: ["Expo", "React Native", "Firebase"],
+    tags: ["Expo", "Next.js", "React Native", "Firebase", "NativeWind"],
   },
   {
     slug: "customer-website",
@@ -93,6 +93,6 @@ export const skillGroups = [
   },
   {
     label: "Tools & Workflow",
-    skills: ["Git", "GitHub", "Vercel", "VS Code"],
+    skills: ["Git", "GitHub", "Vercel", "VS Code", "Firebase App Hosting"],
   },
 ];

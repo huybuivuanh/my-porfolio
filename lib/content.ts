@@ -36,7 +36,7 @@ export const apps = [
     slug: "pos",
     title: "Point of Sale (POS)",
     description:
-      "Cross-platform Expo app for staff to handle dine-in table orders, take-out, item customization, and payments. Paired with a Next.js admin panel for menu management, order history, and staff accounts.",
+      "Cross-platform Expo app for staff to handle dine-in table orders, take-out, item customization, and payments. Paired with a Next.js admin panel for menu management, order history, and staff accounts. App currently available on the App Store as unlisted app and can be downloaded at https://apps.apple.com/us/app/asianlepos/id6754255041",
     tags: ["Expo", "React Native", "Firebase", "NativeWind", "Zustand"],
   },
   {

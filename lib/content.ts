@@ -37,35 +37,45 @@ export const apps = [
     slug: "pos",
     title: "Point of Sale (POS)",
     description:
-      "Cross-platform Expo app for staff to handle dine-in table orders, take-out, and item customization. Paired with a Next.js admin panel for menu management, order history, and staff accounts. App currently available on the App Store as unlisted app and can be downloaded at https://apps.apple.com/us/app/asianlepos/id6754255041",
+      "The staff-facing app for running the restaurant floor. Handles dine-in table orders, take-out, and item customization. Paired with a Next.js admin panel for menu management, order history, and staff accounts. Available on the App Store and Google Play Store as unlisted App: https://apps.apple.com/us/app/asianlepos/id6754255041 ; https://play.google.com/store/apps/details?id=com.buivuanhhuy.AsianLePOS",
+    architecture:
+      "Chose Expo so the same codebase runs on both iOS and Android without maintaining two native projects. Firebase Realtime DB handles order state so table updates appear instantly on every device without any polling. Order printing is handled by a local Node.js/Express print server that listens to a Firestore queue and routes tickets to a thermal printer via USB — runs as a Windows background service using NSSM so it starts on boot and restarts automatically if it crashes.",
     tags: ["Expo", "Next.js", "React Native", "Firebase", "NativeWind"],
   },
   {
     slug: "kds",
     title: "Kitchen Display System (KDS)",
     description:
-      "Real-time tablet app for kitchen staff. Orders appear instantly as they're placed and update live across devices. Shares the same Firebase backend as the POS.",
+      "The kitchen-facing companion to the POS. Orders appear the moment they are placed and update live across all tablets — no refresh, no polling. Staff depend on this during every shift.",
+    architecture:
+      "Shares the same Firebase Realtime DB as the POS — a deliberate choice to keep order state consistent across devices without a separate API layer or any sync logic between systems.",
     tags: ["Expo", "Next.js", "React Native", "Firebase", "NativeWind"],
   },
   {
     slug: "gift-card",
     title: "Gift Card System",
     description:
-      "Full gift card lifecycle — issuance, balance tracking, and redemption — QR based with data integrity to prevent double-spending. Includes a separate admin panel for managing cards.",
+      "Full gift card lifecycle in one system: issuance, balance tracking, and QR-based redemption. Built to be bulletproof — Firestore transactions ensure a card scanned twice simultaneously never produces a double-spend. Paired with a Next.js admin panel for issuing cards and reviewing balances.",
+    architecture:
+      "Runs on its own Firebase project to keep gift card balances isolated from POS data — a clean boundary that simplifies access control and limits blast radius if either system has issues.",
     tags: ["Expo", "Next.js", "React Native", "Firebase", "NativeWind"],
   },
   {
     slug: "staff-clock-in",
     title: "Staff Clock-In",
     description:
-      "Staff attendance and shift tracking app with a dedicated admin panel for reviewing hours and managing records. Core clock-in and shift logging flows are built; currently paused while I focus on the four apps in production.",
+      "Shift and attendance tracking for staff, with a Next.js admin panel for reviewing hours and managing records. Core flows are live; currently paused while the four production apps take priority.",
+    architecture:
+      "Kept on its own Firebase project so staff records stay completely isolated from customer-facing systems — a deliberate boundary that makes access control simpler and limits blast radius if either side has issues.",
     tags: ["Expo", "Next.js", "React Native", "Firebase", "NativeWind"],
   },
   {
     slug: "customer-website",
     title: "Customer Website",
     description:
-      "Public-facing restaurant website for customers — menu, info, and online presence. Backed by its own Firebase project with a separate admin panel for content updates. Website is currently live at https://www.asianle.ca/",
+      "The public face of the restaurant. Menu, info, and online presence — with a Next.js admin panel so content updates never require a code deploy. Live at asianle.ca.",
+    architecture:
+      "Built with Next.js for fast page loads and SEO, since a public restaurant site needs to be discoverable. Content updates go through the admin panel so menu changes never require a code deploy.",
     tags: ["Next.js", "Firebase", "Tailwind CSS"],
   },
 ];

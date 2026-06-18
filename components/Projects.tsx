@@ -10,6 +10,7 @@ import type { MediaEntry } from "@/lib/media";
 type App = {
   title: string;
   description: string;
+  architecture?: string;
   tags: string[];
   media?: MediaEntry[];
 };
@@ -342,9 +343,14 @@ export default function Projects({ apps }: { apps: App[] }) {
                   <h3 className="text-base font-semibold text-white mb-3">
                     {app.title}
                   </h3>
-                  <p className="text-neutral-400 leading-relaxed mb-4">
+                  <p className="text-neutral-400 leading-relaxed mb-3">
                     {app.description}
                   </p>
+                  {app.architecture && (
+                    <p className="text-sm text-neutral-500 leading-relaxed mb-4 border-l-2 border-white/10 pl-3">
+                      {app.architecture}
+                    </p>
+                  )}
                   <div className="flex flex-wrap gap-1.5">
                     {app.tags.map((t) => (
                       <Tag key={t} label={t} />

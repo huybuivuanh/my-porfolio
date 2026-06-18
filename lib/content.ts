@@ -70,6 +70,12 @@ export const apps = [
   },
 ];
 
+export const lookingFor = {
+  description:
+    "I'm actively looking for a junior developer role where I can contribute to a real product and keep growing as an engineer. My schedule is clear — I can start immediately.",
+  tags: ["Available immediately", "Remote-friendly", "Open to relocation"],
+};
+
 export const skillGroups = [
   {
     label: "Languages & Frameworks",

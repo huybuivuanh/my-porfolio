@@ -58,7 +58,7 @@ export const apps = [
     slug: "staff-clock-in",
     title: "Staff Clock-In",
     description:
-      "Staff attendance and shift tracking app with a dedicated admin panel. Around 80% complete — development paused to focus on improving the four production apps.",
+      "Staff attendance and shift tracking app with a dedicated admin panel for reviewing hours and managing records. Core clock-in and shift logging flows are built; currently paused while I focus on the four apps in production.",
     tags: ["Expo", "Next.js", "React Native", "Firebase", "NativeWind"],
   },
   {

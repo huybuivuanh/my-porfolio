@@ -327,8 +327,8 @@ export default function Projects({ apps }: { apps: App[] }) {
             <p className="text-sm text-neutral-500 italic">{suite.note}</p>
           </motion.div>
 
-          {/* Individual app cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Individual apps as subsections */}
+          <div className="divide-y divide-white/[0.04] mt-2">
             {apps.map((app, i) => (
               <motion.div
                 key={app.title}
@@ -336,32 +336,36 @@ export default function Projects({ apps }: { apps: App[] }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.07 }}
-                className="p-6 rounded-xl border border-white/[0.07] bg-[#111111] hover:border-[#3b9eff]/30 hover:shadow-[0_4px_24px_rgba(59,158,255,0.06)] hover:-translate-y-1 transition-all duration-300"
+                className="py-10 flex flex-col md:flex-row gap-8 items-start"
               >
-                {app.media && app.media.length > 0 && (
-                  <CardMedia
-                    media={app.media}
-                    title={app.title}
-                    onOpen={(index) =>
-                      setOpenMedia({
-                        items: app.media!,
-                        index,
-                        title: app.title,
-                      })
-                    }
-                  />
-                )}
-                <h3 className="text-base font-semibold text-white mb-3">
-                  {app.title}
-                </h3>
-                <p className="text-sm text-neutral-400 leading-relaxed mb-4">
-                  {app.description}
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {app.tags.map((t) => (
-                    <Tag key={t} label={t} />
-                  ))}
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-base font-semibold text-white mb-3">
+                    {app.title}
+                  </h3>
+                  <p className="text-neutral-400 leading-relaxed mb-4">
+                    {app.description}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {app.tags.map((t) => (
+                      <Tag key={t} label={t} />
+                    ))}
+                  </div>
                 </div>
+                {app.media && app.media.length > 0 && (
+                  <div className="shrink-0 w-full md:w-72">
+                    <CardMedia
+                      media={app.media}
+                      title={app.title}
+                      onOpen={(index) =>
+                        setOpenMedia({
+                          items: app.media!,
+                          index,
+                          title: app.title,
+                        })
+                      }
+                    />
+                  </div>
+                )}
               </motion.div>
             ))}
           </div>

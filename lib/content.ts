@@ -1,5 +1,6 @@
 export const person = {
   name: "Vu Anh Huy Bui",
+  email: "huy.buivu12345@gmail.com",
   github: "https://github.com/huybuivuanh",
   linkedin: "https://www.linkedin.com/in/vu-anh-huy-bui-1467a8277/",
 };

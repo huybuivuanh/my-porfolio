@@ -1,4 +1,4 @@
-import { GithubIcon, LinkedinIcon } from "@/components/icons";
+import { GithubIcon, LinkedinIcon, MailIcon } from "@/components/icons";
 import { person } from "@/lib/content";
 
 export default function Footer() {
@@ -7,6 +7,13 @@ export default function Footer() {
       <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
         <span className="text-sm text-neutral-500">{person.name}</span>
         <div className="flex items-center gap-6">
+          <a
+            href={`mailto:${person.email}`}
+            className="flex items-center gap-2 text-sm text-neutral-500 hover:text-white transition-colors"
+          >
+            <MailIcon size={15} />
+            {person.email}
+          </a>
           <a
             href={person.github}
             target="_blank"

@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { GithubIcon } from "@/components/icons";
+import { GithubIcon, LinkedinIcon, MailIcon } from "@/components/icons";
 import { person, hero } from "@/lib/content";
 
 export default function Hero() {
@@ -51,6 +51,22 @@ export default function Hero() {
             >
               <GithubIcon size={16} />
               GitHub
+            </a>
+            <a
+              href={person.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-3 border border-white/10 text-neutral-300 font-medium rounded-lg hover:border-[#3b9eff]/40 hover:text-white transition-all flex items-center gap-2 text-sm"
+            >
+              <LinkedinIcon size={16} />
+              LinkedIn
+            </a>
+            <a
+              href={`mailto:${person.email}`}
+              className="px-6 py-3 border border-white/10 text-neutral-300 font-medium rounded-lg hover:border-[#3b9eff]/40 hover:text-white transition-all flex items-center gap-2 text-sm"
+            >
+              <MailIcon size={16} />
+              {person.email}
             </a>
           </div>
         </motion.div>

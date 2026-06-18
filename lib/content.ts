@@ -37,7 +37,7 @@ export const apps = [
     slug: "pos",
     title: "Point of Sale (POS)",
     description:
-      "The staff-facing app for running the restaurant floor. Handles dine-in table orders, take-out, and item customization. Paired with a Next.js admin panel for menu management, order history, and staff accounts. Available on the App Store and Google Play Store as unlisted App: https://apps.apple.com/us/app/asianlepos/id6754255041 ; https://play.google.com/store/apps/details?id=com.buivuanhhuy.AsianLePOS",
+      "The staff-facing app for running the restaurant floor. Handles dine-in table orders, take-out, and item customization. Paired with a Next.js admin panel for menu management, order history, and staff accounts. Available on the App Store as unlisted App: https://apps.apple.com/us/app/asianlepos/id6754255041",
     architecture:
       "Chose Expo so the same codebase runs on both iOS and Android without maintaining two native projects. Firebase Realtime DB handles order state so table updates appear instantly on every device without any polling. Order printing is handled by a local Node.js/Express print server that listens to a Firestore queue and routes tickets to a thermal printer via USB — runs as a Windows background service using NSSM so it starts on boot and restarts automatically if it crashes.",
     tags: ["Expo", "Next.js", "React Native", "Firebase", "NativeWind"],

@@ -1,4 +1,17 @@
 @import "tailwindcss";
+@import "plyr/dist/plyr.css";
+
+/* Plyr theme overrides */
+:root {
+  --plyr-color-main: #3b9eff;
+  --plyr-video-background: #000;
+  --plyr-menu-background: #111;
+  --plyr-menu-color: rgba(255,255,255,0.8);
+  --plyr-menu-border-color: rgba(255,255,255,0.08);
+  --plyr-tooltip-background: #111;
+  --plyr-tooltip-color: #fff;
+}
+
 html {
   scroll-behavior: smooth;
 }

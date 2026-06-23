@@ -1,6 +1,6 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { FaPlay } from "react-icons/fa";
 import { FiX, FiChevronLeft, FiChevronRight } from "react-icons/fi";
@@ -92,6 +92,52 @@ function MediaItem({
   );
 }
 
+// ── Plyr-backed video player ────────────────────────────────────────────────
+
+function VideoPlayer({ src, poster }: { src: string; poster?: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const playerRef = useRef<import("plyr") | null>(null);
+
+  useEffect(() => {
+    if (!videoRef.current) return;
+    let player: import("plyr") | null = null;
+
+    import("plyr").then(({ default: Plyr }) => {
+      if (!videoRef.current) return;
+      player = new Plyr(videoRef.current, {
+        controls: [
+          "play-large",
+          "play",
+          "progress",
+          "current-time",
+          "mute",
+          "volume",
+          "settings",
+          "fullscreen",
+        ],
+        settings: ["speed"],
+        speed: { selected: 1, options: [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2] },
+        hideControls: true,
+        resetOnEnd: false,
+      });
+      playerRef.current = player;
+    });
+
+    return () => {
+      player?.destroy();
+      playerRef.current = null;
+    };
+  }, [src]);
+
+  return (
+    <div className="w-full rounded-xl overflow-hidden">
+      <video ref={videoRef} src={src} poster={poster} playsInline />
+    </div>
+  );
+}
+
+// ── Fullscreen modal ────────────────────────────────────────────────────────
+
 function MediaModal({
   items,
   initialIndex,
@@ -122,69 +168,110 @@ function MediaModal({
     };
   }, [onClose, hasPrev, hasNext]);
 
+  const isVideo = current.type === "video";
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/90 p-2"
+      className="fixed inset-0 z-50 bg-black/96 flex flex-col"
       onClick={onClose}
     >
-      <button
-        onClick={onClose}
-        className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"
-        aria-label="Close"
-      >
-        <FiX size={26} />
-      </button>
-
+      {/* Header bar */}
       <div
+        className="flex items-center justify-between px-4 py-3 shrink-0"
         onClick={(e) => e.stopPropagation()}
-        className="relative max-w-7xl w-full flex items-center gap-3"
       >
+        <span className="text-white/50 text-sm font-medium truncate">{title}</span>
+        <button
+          onClick={onClose}
+          className="text-white/50 hover:text-white transition-colors p-1.5 rounded-md hover:bg-white/10"
+          aria-label="Close"
+        >
+          <FiX size={20} />
+        </button>
+      </div>
+
+      {/* Main area */}
+      <div
+        className="flex-1 relative overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Prev nav */}
         <button
           onClick={() => setIdx((i) => i - 1)}
           disabled={!hasPrev}
-          className="shrink-0 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white disabled:opacity-0 disabled:pointer-events-none transition-all"
+          className="absolute left-3 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white border border-white/10 disabled:opacity-0 disabled:pointer-events-none transition-all"
           aria-label="Previous"
         >
           <FiChevronLeft size={22} />
         </button>
 
-        <div className="flex-1 min-w-0">
-          {current.type === "video" ? (
-            <video
-              key={current.src}
-              src={current.src}
-              poster={current.poster}
-              controls
-              autoPlay
-              className="w-full rounded-xl"
-            />
-          ) : (
-            <MediaItem item={current} title={title} fill={false} />
-          )}
-        </div>
+        {/* Content */}
+        {isVideo ? (
+          <div className="absolute inset-0 flex items-center justify-center px-14">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="w-full max-w-5xl"
+              >
+                <VideoPlayer src={current.src} poster={current.poster} />
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        ) : (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="absolute inset-0 px-14"
+            >
+              <div className="relative w-full h-full">
+                <Image
+                  src={current.src}
+                  alt={title}
+                  fill
+                  style={{ objectFit: "contain" }}
+                  sizes="100vw"
+                  priority
+                />
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        )}
 
+        {/* Next nav */}
         <button
           onClick={() => setIdx((i) => i + 1)}
           disabled={!hasNext}
-          className="shrink-0 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white disabled:opacity-0 disabled:pointer-events-none transition-all"
+          className="absolute right-3 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white border border-white/10 disabled:opacity-0 disabled:pointer-events-none transition-all"
           aria-label="Next"
         >
           <FiChevronRight size={22} />
         </button>
       </div>
 
+      {/* Dot navigation */}
       {items.length > 1 && (
-        <div onClick={(e) => e.stopPropagation()} className="flex gap-2 mt-4">
+        <div
+          className="flex gap-2 py-3 justify-center shrink-0"
+          onClick={(e) => e.stopPropagation()}
+        >
           {items.map((_, i) => (
             <button
               key={i}
               onClick={() => setIdx(i)}
               className={`w-2 h-2 rounded-full transition-all ${
-                i === idx ? "bg-white" : "bg-white/30 hover:bg-white/50"
+                i === idx ? "bg-white" : "bg-white/30 hover:bg-white/60"
               }`}
               aria-label={`Go to item ${i + 1}`}
             />
@@ -194,6 +281,8 @@ function MediaModal({
     </motion.div>
   );
 }
+
+// ── Card thumbnail strip ────────────────────────────────────────────────────
 
 function CardMedia({
   media,
@@ -208,57 +297,40 @@ function CardMedia({
   const current = media[idx];
 
   return (
-    <div className="relative w-full aspect-video rounded-lg overflow-hidden mb-4 group">
-      <button
-        onClick={() => onOpen(idx)}
-        className="absolute inset-0 w-full h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3b9eff] focus-visible:ring-inset"
-        aria-label={`View ${title} media`}
-      >
+    <div className="mb-4">
+      {/* Media area */}
+      <div className="relative w-full rounded-lg overflow-hidden group">
         <motion.div
           key={idx}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.2 }}
-          className="w-full h-full"
         >
-          {current.type === "image" ? (
-            <div className="relative w-full h-full group-hover:scale-105 transition-transform duration-500">
-              <MediaItem item={current} title={title} fill />
-            </div>
+          {current.type === "video" ? (
+            // Video plays inline — no modal needed
+            <VideoPlayer src={current.src} poster={current.poster} />
           ) : (
-            <div className="w-full h-full">
-              {current.poster ? (
-                <div className="relative w-full h-full group-hover:scale-105 transition-transform duration-500">
-                  <MediaItem item={current} title={title} fill />
-                </div>
-              ) : (
-                <div className="w-full h-full bg-white/[0.04] flex items-center justify-center">
-                  <div className="w-11 h-11 rounded-full bg-white/15 border border-white/20 flex items-center justify-center backdrop-blur-sm">
-                    <FaPlay size={13} className="text-white ml-0.5" />
-                  </div>
-                </div>
-              )}
-              {current.poster && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/20 transition-colors duration-300">
-                  <div className="w-11 h-11 rounded-full bg-white/15 border border-white/20 flex items-center justify-center backdrop-blur-sm group-hover:bg-white/25 transition-colors duration-300">
-                    <FaPlay size={13} className="text-white ml-0.5" />
-                  </div>
-                </div>
-              )}
-            </div>
+            // Image opens fullscreen modal on click
+            <button
+              onClick={() => onOpen(idx)}
+              className="block w-full aspect-video relative focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3b9eff] focus-visible:ring-inset"
+              aria-label={`View ${title} fullscreen`}
+            >
+              <div className="w-full h-full group-hover:scale-105 transition-transform duration-500">
+                <MediaItem item={current} title={title} fill />
+              </div>
+            </button>
           )}
         </motion.div>
-      </button>
+      </div>
 
+      {/* Dots — outside the media area so they never overlap Plyr controls */}
       {media.length > 1 && (
-        <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1.5 z-10">
+        <div className="flex justify-center gap-1.5 mt-2">
           {media.map((_, i) => (
             <button
               key={i}
-              onClick={(e) => {
-                e.stopPropagation();
-                setIdx(i);
-              }}
+              onClick={() => setIdx(i)}
               className={`w-1.5 h-1.5 rounded-full transition-all ${
                 i === idx
                   ? "bg-white shadow-sm"
@@ -272,6 +344,8 @@ function CardMedia({
     </div>
   );
 }
+
+// ── Section ─────────────────────────────────────────────────────────────────
 
 export default function Projects({ apps }: { apps: App[] }) {
   const [openMedia, setOpenMedia] = useState<{
@@ -328,7 +402,7 @@ export default function Projects({ apps }: { apps: App[] }) {
             <p className="text-sm text-neutral-500 italic">{suite.note}</p>
           </motion.div>
 
-          {/* Individual apps as subsections */}
+          {/* Individual apps */}
           <div className="divide-y divide-white/[0.04] mt-2">
             {apps.map((app, i) => (
               <motion.div

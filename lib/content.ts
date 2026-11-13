@@ -37,7 +37,8 @@ export const apps = [
     slug: "pos",
     title: "Point of Sale (POS)",
     description:
-      "The staff-facing app for running the restaurant floor. Handles dine-in table orders, take-out, item customization, online orders, and rewards points. Paired with a Next.js admin panel for menu management, order history, and staff accounts. Available on the App Store as unlisted App: https://apps.apple.com/us/app/asianlepos/id6754255041",
+      "The staff-facing app for running the restaurant floor. Handles dine-in table orders, take-out, item customization, online orders, and rewards points. Paired with a Next.js admin panel for menu management, order history, and staff accounts. Available on the App Store as an unlisted app.",
+    appStore: "https://apps.apple.com/us/app/asianlepos/id6754255041",
     architecture:
       "Chose Expo so the same codebase runs on iOS, Android, and web without maintaining separate native projects. Firestore real-time listeners keep order state in sync, so table updates appear instantly on every device without any polling. Order printing is handled by a local Node.js/Express print server that listens to a Firestore queue and routes tickets to a thermal printer via USB — runs as a Windows background service using NSSM so it starts on boot and restarts automatically if it crashes.",
     tags: ["Expo", "Next.js", "React Native", "Firebase", "NativeWind"],
@@ -55,7 +56,8 @@ export const apps = [
     slug: "online-orders",
     title: "Online Orders",
     description:
-      "Where staff manage takeout orders placed on the website. New orders arrive live with a full-screen alert and sound; staff accept them with a ready time, print, complete, or cancel. Also controls sold-out items, pausing online ordering, and the wait time. Runs on tablets, iOS, and web. Available on the App Store: https://apps.apple.com/ca/app/asian-le-orders/id6806611519",
+      "Where staff manage takeout orders placed on the website. New orders arrive live with a full-screen alert and sound; staff accept them with a ready time, print, complete, or cancel. Also controls sold-out items, pausing online ordering, and the wait time. Runs on tablets, iOS, and web.",
+    appStore: "https://apps.apple.com/ca/app/asian-le-orders/id6806611519",
     architecture:
       "The website writes orders and this app only manages them, so each side has one job. Completing an order calls Cloud Functions to redeem and earn rewards points, and retries never double-count. Printing goes through a Firestore queue to a dedicated print service on the restaurant PC. Built for an always-on tablet: keeps the screen awake, shows an offline overlay, and forces an update when the app version is too old.",
     tags: ["Expo", "React Native", "Firestore", "Cloud Functions", "Sentry"],
@@ -64,7 +66,8 @@ export const apps = [
     slug: "rewards",
     title: "Asian Le Rewards",
     description:
-      "Customer loyalty app. Customers sign up, see their points balance and a personal QR code, and follow their points history. Staff scan the QR at the POS to earn and redeem points, and customers can spend points at online checkout. Also on the web at rewards.asianle.ca. Available on the App Store: https://apps.apple.com/ca/app/asian-le-rewards/id6828595669",
+      "Customer loyalty app. Customers sign up, see their points balance and a personal QR code, and follow their points history. Staff scan the QR at the POS to earn and redeem points, and customers can spend points at online checkout. Also on the web at rewards.asianle.ca.",
+    appStore: "https://apps.apple.com/ca/app/asian-le-rewards/id6828595669",
     architecture:
       "Points only change through Cloud Functions, never from the client, and every transaction is keyed by order ID so retries are idempotent and refunds can be reversed cleanly. Security rules keep customers to their own data and refuse staff accounts.",
     tags: ["Expo", "React Native", "Firebase Auth", "Cloud Functions", "NativeWind"],
@@ -74,6 +77,7 @@ export const apps = [
     title: "Customer Website",
     description:
       "The public face of the restaurant, live at asianle.ca. Customers browse the menu, order takeout online (now or scheduled), book a table, and use their rewards points at checkout. A Next.js admin panel manages the menu, specials, gallery, and hours so content updates never require a code deploy.",
+    website: "https://www.asianle.ca",
     architecture:
       "Built with Next.js for fast page loads and SEO. Prices are never trusted from the browser: the order API route re-prices the cart from live Firestore data, checks availability and pickup time, and writes with the Admin SDK.",
     tags: ["Next.js", "Firebase", "Tailwind CSS"],

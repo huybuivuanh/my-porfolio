@@ -18,7 +18,7 @@ type App = {
 };
 
 const SIZES =
-  "(max-width: 768px) calc(100vw - 3rem), (max-width: 1024px) calc(50vw - 2rem), 33vw";
+  "(max-width: 768px) calc(100vw - 3rem), 460px";
 
 const LINK_BUTTON =
   "inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-[#3b9eff]/30 text-[#3b9eff] hover:bg-[#3b9eff]/10 hover:border-[#3b9eff]/60 transition-colors";
@@ -31,68 +31,46 @@ function Tag({ label }: { label: string }) {
   );
 }
 
-function MediaItem({
-  item,
-  title,
-  fill: isFill,
-}: {
-  item: MediaEntry;
-  title: string;
-  fill: boolean;
-}) {
+// Card preview: shows the whole image (no cropping), so phone screenshots and
+// desktop screenshots both read clearly. Videos show their first frame (or
+// poster) with a play badge and open in the fullscreen viewer.
+function CardThumb({ item, title }: { item: MediaEntry; title: string }) {
   if (item.type === "image") {
     return (
       <Image
         src={item.src}
         alt={title}
-        fill={isFill}
-        width={isFill ? undefined : 1920}
-        height={isFill ? undefined : 1080}
-        sizes={isFill ? SIZES : undefined}
-        style={
-          isFill
-            ? undefined
-            : {
-                width: "100%",
-                height: "auto",
-                maxHeight: "85vh",
-                objectFit: "contain",
-              }
-        }
-        className={isFill ? "object-cover" : "rounded-xl"}
+        fill
+        sizes={SIZES}
+        className="object-contain"
       />
     );
   }
   return (
     <>
-      {item.poster && (
+      {item.poster ? (
         <Image
           src={item.poster}
           alt={title}
-          fill={isFill}
-          width={isFill ? undefined : 1920}
-          height={isFill ? undefined : 1080}
-          sizes={isFill ? SIZES : undefined}
-          style={
-            isFill
-              ? undefined
-              : {
-                  width: "100%",
-                  height: "auto",
-                  maxHeight: "85vh",
-                  objectFit: "contain",
-                }
-          }
-          className={isFill ? "object-cover" : "rounded-xl"}
+          fill
+          sizes={SIZES}
+          className="object-contain"
+        />
+      ) : (
+        <video
+          src={`${item.src}#t=0.1`}
+          preload="metadata"
+          muted
+          playsInline
+          aria-hidden
+          className="absolute inset-0 w-full h-full object-contain pointer-events-none"
         />
       )}
-      {isFill && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-          <div className="w-11 h-11 rounded-full bg-white/15 border border-white/20 flex items-center justify-center backdrop-blur-sm">
-            <FaPlay size={13} className="text-white ml-0.5" />
-          </div>
+      <div className="absolute inset-0 flex items-center justify-center bg-black/25">
+        <div className="w-14 h-14 rounded-full bg-[#3b9eff]/90 shadow-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+          <FaPlay size={16} className="text-white ml-1" />
         </div>
-      )}
+      </div>
     </>
   );
 }
@@ -299,47 +277,93 @@ function CardMedia({
   onOpen: (index: number) => void;
 }) {
   const [idx, setIdx] = useState(0);
+  const touchStartX = useRef<number | null>(null);
+  const swiped = useRef(false);
   const current = media[idx];
+  const count = media.length;
+  const multiple = count > 1;
+
+  const go = (delta: number) => setIdx((i) => (i + delta + count) % count);
+
+  const arrowClass =
+    "absolute top-1/2 -translate-y-1/2 z-10 p-1.5 rounded-full bg-black/60 hover:bg-black/85 text-white border border-white/10 backdrop-blur-sm transition-opacity md:opacity-0 md:group-hover:opacity-100 focus-visible:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3b9eff]";
 
   return (
-    <div className="mb-4">
-      {/* Media area */}
-      <div className="relative w-full rounded-lg overflow-hidden group">
-        <motion.div
-          key={idx}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.2 }}
-        >
-          {current.type === "video" ? (
-            // Video plays inline — no modal needed
-            <VideoPlayer src={current.src} poster={current.poster} />
-          ) : (
-            // Image opens fullscreen modal on click
+    <div>
+      <div
+        className="relative w-full aspect-[4/3] rounded-xl overflow-hidden border border-white/[0.07] bg-[#141414] group"
+        onTouchStart={(e) => {
+          touchStartX.current = e.touches[0].clientX;
+          swiped.current = false;
+        }}
+        onTouchEnd={(e) => {
+          if (touchStartX.current === null || !multiple) return;
+          const dx = e.changedTouches[0].clientX - touchStartX.current;
+          if (Math.abs(dx) > 40) {
+            swiped.current = true;
+            go(dx < 0 ? 1 : -1);
+          }
+          touchStartX.current = null;
+        }}
+      >
+        <AnimatePresence initial={false} mode="wait">
+          <motion.button
+            key={idx}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            onClick={() => {
+              if (swiped.current) {
+                swiped.current = false;
+                return;
+              }
+              onOpen(idx);
+            }}
+            className="absolute inset-0 w-full h-full cursor-zoom-in focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3b9eff] focus-visible:ring-inset"
+            aria-label={
+              current.type === "video"
+                ? `Play ${title} video`
+                : `View ${title} screenshot fullscreen`
+            }
+          >
+            <CardThumb item={current} title={title} />
+          </motion.button>
+        </AnimatePresence>
+
+        {multiple && (
+          <>
             <button
-              onClick={() => onOpen(idx)}
-              className="block w-full aspect-video relative focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3b9eff] focus-visible:ring-inset"
-              aria-label={`View ${title} fullscreen`}
+              onClick={() => go(-1)}
+              className={`${arrowClass} left-2`}
+              aria-label="Previous"
             >
-              <div className="w-full h-full group-hover:scale-105 transition-transform duration-500">
-                <MediaItem item={current} title={title} fill />
-              </div>
+              <FiChevronLeft size={18} />
             </button>
-          )}
-        </motion.div>
+            <button
+              onClick={() => go(1)}
+              className={`${arrowClass} right-2`}
+              aria-label="Next"
+            >
+              <FiChevronRight size={18} />
+            </button>
+            <span className="absolute top-2 right-2 z-10 px-2 py-0.5 rounded-md bg-black/60 text-white/80 text-xs font-medium tabular-nums backdrop-blur-sm pointer-events-none">
+              {idx + 1} / {count}
+            </span>
+          </>
+        )}
       </div>
 
-      {/* Dots — outside the media area so they never overlap Plyr controls */}
-      {media.length > 1 && (
-        <div className="flex justify-center gap-1.5 mt-2">
+      {multiple && (
+        <div className="flex justify-center gap-1.5 mt-3">
           {media.map((_, i) => (
             <button
               key={i}
               onClick={() => setIdx(i)}
-              className={`w-1.5 h-1.5 rounded-full transition-all ${
+              className={`h-1.5 rounded-full transition-all ${
                 i === idx
-                  ? "bg-white shadow-sm"
-                  : "bg-white/40 hover:bg-white/60"
+                  ? "w-4 bg-[#3b9eff]"
+                  : "w-1.5 bg-white/30 hover:bg-white/60"
               }`}
               aria-label={`View media ${i + 1}`}
             />
@@ -465,7 +489,7 @@ export default function Projects({ apps }: { apps: App[] }) {
                   )}
                 </div>
                 {app.media && app.media.length > 0 && (
-                  <div className="shrink-0 w-full md:w-72">
+                  <div className="shrink-0 w-full md:w-[44%]">
                     <CardMedia
                       media={app.media}
                       title={app.title}

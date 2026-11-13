@@ -111,6 +111,49 @@ export const apps = [
   },
 ];
 
+export const homeServer = {
+  title: "Self-Hosted Cloud Server",
+  badge: "In Production",
+  description:
+    "A self-hosted Google Drive replacement for the restaurant, running on a 2010-era HP ProLiant tower. Nextcloud runs in Docker on Ubuntu Server and gives staff file sync, sharing, and in-browser Office editing from their computers and phones.",
+  highlights: [
+    {
+      label: "Zero open ports",
+      text: "Public access goes through a Cloudflare Tunnel. Admin tools (SSH, Cockpit, the Nextcloud admin page) are reachable only over a private Tailscale network.",
+    },
+    {
+      label: "Three layers of protection",
+      text: "A RAID 1 mirror covers a dead drive; nightly encrypted, deduplicated BorgBackup to a separate drive covers deletions and ransomware. Restore has been tested.",
+    },
+    {
+      label: "Phone alerts",
+      text: "Mirror failures and SMART drive-health warnings are pushed to my phone through ntfy, with daily and weekly drive self-tests.",
+    },
+    {
+      label: "Recovers on its own",
+      text: "After a silent hardware freeze, I added a hardware watchdog, auto-reboot on kernel panic, and a boot alert, so the server restarts itself and tells me when it does.",
+    },
+    {
+      label: "Large uploads",
+      text: "Tuned the sync clients to upload in chunks so files stay under Cloudflare's 100 MB per-request limit; 800 MB+ files upload fine.",
+    },
+    {
+      label: "Documented",
+      text: "Setup steps and fixes for issues I ran into are written down in a manual, so the server can be maintained or rebuilt later.",
+    },
+  ],
+  tags: [
+    "Ubuntu Server",
+    "Docker",
+    "Nextcloud",
+    "Cloudflare Tunnel",
+    "Tailscale",
+    "RAID 1 (mdadm)",
+    "BorgBackup",
+    "Bash",
+  ],
+};
+
 export const lookingFor = {
   description:
     "I'm actively looking for a junior developer role where I can contribute to a real product and keep growing as an engineer. My schedule is clear — I can start immediately.",
@@ -138,6 +181,10 @@ export const skillGroups = [
       "Firestore Security Rules",
       "Next.js API Routes",
       "Serverless Architecture",
+      "Docker",
+      "Linux (Ubuntu Server)",
+      "Cloudflare Tunnel",
+      "Tailscale",
     ],
   },
   {

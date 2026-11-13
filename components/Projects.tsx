@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { FaApple, FaPlay } from "react-icons/fa";
 import { FiX, FiChevronLeft, FiChevronRight, FiExternalLink } from "react-icons/fi";
-import { suite } from "@/lib/content";
+import { suite, homeServer } from "@/lib/content";
 import type { MediaEntry } from "@/lib/media";
 
 type App = {
@@ -506,6 +506,45 @@ export default function Projects({ apps }: { apps: App[] }) {
               </motion.div>
             ))}
           </div>
+
+          {/* Infrastructure */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="mt-10 p-8 rounded-xl border border-white/[0.08] bg-[#111111] hover:border-[#3b9eff]/30 transition-colors duration-300"
+          >
+            <div className="flex items-start justify-between gap-4 flex-wrap mb-3">
+              <h3 className="text-xl font-semibold text-white">
+                {homeServer.title}
+              </h3>
+              <span className="shrink-0 text-xs px-3 py-1 rounded-full border border-[#3b9eff]/30 text-[#3b9eff] font-medium">
+                {homeServer.badge}
+              </span>
+            </div>
+            <p className="text-neutral-400 leading-relaxed mb-6">
+              {homeServer.description}
+            </p>
+            <ul className="grid gap-x-8 gap-y-4 md:grid-cols-2 mb-6">
+              {homeServer.highlights.map((h) => (
+                <li
+                  key={h.label}
+                  className="text-sm leading-relaxed border-l-2 border-[#3b9eff]/40 pl-3"
+                >
+                  <span className="block text-white font-medium mb-0.5">
+                    {h.label}
+                  </span>
+                  <span className="text-neutral-500">{h.text}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="flex flex-wrap gap-1.5">
+              {homeServer.tags.map((t) => (
+                <Tag key={t} label={t} />
+              ))}
+            </div>
+          </motion.div>
         </div>
       </section>
     </>
